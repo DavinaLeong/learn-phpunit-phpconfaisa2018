@@ -4,7 +4,7 @@ namespace TicketToRide;
 use PHPUnit\Framework\TestCase;
 
 
-final class RouteTest extends TestCase
+final class RouteCityTest extends TestCase
 {
     const FIRST_CITY_NAME    = "HelloCity";
     const SECOND_CITY_NAME   = "HelloMetropolis";
