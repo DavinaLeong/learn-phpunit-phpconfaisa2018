@@ -21,7 +21,7 @@ final class RouteTest extends TestCase
             Length::one()
         );
 
-        $this->assertNotNull($route);
+        $this->assertEquals($route->firstCity()->name(), $this::FIRST_CITY_NAME);
     }
 
     public function testCitiesCannotBeSame()
