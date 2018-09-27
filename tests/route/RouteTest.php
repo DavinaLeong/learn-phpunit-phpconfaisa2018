@@ -26,4 +26,11 @@ final class RouteTest extends TestCase
         new Route($this->city, $this->citySameName, Color::red(), Length::one());
     }
 
+    public function testHasColor()
+    {
+        $expected   = Color::purple();
+        $actual     = $this->route->color();
+        $this->assertEquals($expected, $actual);
+    }
+
 } //end RouteTest
