@@ -20,8 +20,8 @@ final class CityTest extends TestCase
 
     public function testValidCity()
     {
-        $expected = "Hello City";
-        $actual = $this->city->name();
+        $expected   = "Hello City";
+        $actual     = $this->city->name();
         $this->assertEquals($expected, $actual);
     }
 
