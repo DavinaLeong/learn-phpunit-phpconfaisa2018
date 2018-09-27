@@ -3,6 +3,9 @@ namespace TicketToRide;
 
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \TicketToRide\City
+ */
 final class CityTest extends TestCase
 {
     private $city;
