@@ -33,4 +33,11 @@ final class RouteTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    public function testHasLength()
+    {
+        $expected   = Length::two();
+        $actual     = $this->route->length();
+        $this->assertEquals($expected, $actual);
+    }
+
 } //end RouteTest
