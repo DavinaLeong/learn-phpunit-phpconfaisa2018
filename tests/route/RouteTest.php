@@ -18,7 +18,7 @@ final class RouteTest extends TestCase
 
     private $route;
 
-    private $cardCollection;
+    private $cards;
 
     public function setUp()
     {
@@ -32,10 +32,9 @@ final class RouteTest extends TestCase
         $this->route        = new Route($this->city, $this->cityDiffName,
            $color, $length);
 
-        $this->cardCollection = new CardCollection([
-            Card::purple(),
-            Card::purple()
-        ]);
+        $this->cards        = new CardCollection();
+        $this->cards->add(Card::purple());
+        $this->cards->add(Card::purple());
     }
 
     public function testCitiesCantBeSame()
@@ -60,7 +59,10 @@ final class RouteTest extends TestCase
 
     public function testCanClaim()
     {
-        $this->markTestIncomplete();
+        $checker    = new RouteClaimChecker();
+        $expected   = $checker->canClaimRoute($this->route, $this->cards);
+
+        $this->assertTrue($expected);
     }
 
     public function testWildcardClaim()
