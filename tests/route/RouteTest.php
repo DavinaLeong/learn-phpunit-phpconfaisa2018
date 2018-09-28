@@ -43,21 +43,21 @@ final class RouteTest extends TestCase
         new Route($this->city, $this->citySameName, Color::red(), Length::one());
     }
 
-    public function testHasColor()
+    public function testRouteHasColor()
     {
         $expected   = Color::purple();
         $actual     = $this->route->color();
         $this->assertEquals($expected, $actual);
     }
 
-    public function testHasLength()
+    public function testRouteHasLength()
     {
         $expected   = Length::two();
         $actual     = $this->route->length();
         $this->assertEquals($expected, $actual);
     }
 
-    public function testCanClaim()
+    public function testRouteIsClaimable()
     {
         $checker    = new RouteClaimChecker();
         $expected   = $checker->canClaimRoute($this->route, $this->cards);
