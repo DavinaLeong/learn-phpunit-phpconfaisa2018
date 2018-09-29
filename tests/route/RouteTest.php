@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 final class RouteTest extends TestCase
 {
     //#region Tests
-    public function testCitiesCantBeSame()
+    public function testCitiesCantBeSame(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $firstCity  = new City("Hello City");
@@ -26,7 +26,7 @@ final class RouteTest extends TestCase
     /**
      * @dataProvider routeColorProvider
      */
-    public function testRouteHasColor($expected, $actual)
+    public function testRouteHasColor($expected, $actual): void
     {
         $this->assertEquals($expected, $actual);
     }
@@ -34,7 +34,7 @@ final class RouteTest extends TestCase
     /**
      * @dataProvider routeLengthProvider
      */
-    public function testRouteHasLength($expected, $actual)
+    public function testRouteHasLength($expected, $actual): void
     {
         $this->assertEquals($expected, $actual);
     }
@@ -42,7 +42,7 @@ final class RouteTest extends TestCase
     /**
      * @dataProvider routeClaimableProvider
      */
-    public function testRouteIsClaimable($expected, $actual)
+    public function testRouteIsClaimable($expected, $actual): void
     {
         $this->assertEquals($expected, $actual);
     }
@@ -50,7 +50,7 @@ final class RouteTest extends TestCase
     /**
      * @dataProvider routeScoreProvider
      */
-    public function testCalculateScore($expected, $actual)
+    public function testCalculateScore($expected, $actual): void
     {
         $this->assertEquals($expected, $actual);
     }
@@ -58,7 +58,7 @@ final class RouteTest extends TestCase
 
 
     //#region Data Providers
-    public function routeColorProvider()
+    public function routeColorProvider(): array
     {
         $city         = new City("Hello City");
         $cityDiffName = new City("Hello Metropolis");
@@ -118,7 +118,7 @@ final class RouteTest extends TestCase
         return $data;
     }
 
-    public function routeLengthProvider()
+    public function routeLengthProvider(): array
     {
         $data = [];
         foreach ($this->routeLengthScoreData() as $rlsData) {
@@ -134,7 +134,7 @@ final class RouteTest extends TestCase
         return $data;
     }
 
-    public function routeClaimableProvider()
+    public function routeClaimableProvider(): array
     {
         $firstCity  = new City("Hello City");
         $secondCity = new City("Hello Metropolis");
@@ -190,7 +190,7 @@ final class RouteTest extends TestCase
         return $data;
     }
 
-    public function routeScoreProvider()
+    public function routeScoreProvider(): array
     {
         $data = [];
         $calculator = new ScoreCalculator();
@@ -208,7 +208,7 @@ final class RouteTest extends TestCase
         return $data;
     }
 
-    private function routeLengthScoreData()
+    private function routeLengthScoreData(): array
     {
         $firstCity  = new City("Hello City");
         $secondCity = new City("Hello Metropolis");
