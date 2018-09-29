@@ -16,7 +16,10 @@ final class RouteTest extends TestCase
     public function testCitiesCantBeSame()
     {
         $this->expectException(InvalidArgumentException::class);
-        new Route("Hello City", "Hello City",
+        $firstCity  = new City("Hello City");
+        $secondCity = new City("Hello City");
+
+        new Route($firstCity, $secondCity,
             Color::white(), Length::one());
     }
 
