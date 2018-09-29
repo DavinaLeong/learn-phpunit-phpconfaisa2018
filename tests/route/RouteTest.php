@@ -114,44 +114,16 @@ final class RouteTest extends TestCase
 
     public function routeLengthProvider()
     {
-        $city         = new City("Hello City");
-        $cityDiffName = new City("Hello Metropolis");
+        $data = [];
+        foreach ($this->routeLengthScoreData() as $rlsData) {
+            $key    = $rlsData['lengthName'];
+            $route  = $rlsData['route'];
+            $length = $rlsData['length'];
 
-        $data = [
-            'one' => [
-                new Route($city, $cityDiffName,
-                    Color::white(), Length::one()),
-                Color::white()
-            ],
-            'two' => [
-                new Route($city, $cityDiffName,
-                    Color::white(), Length::two()),
-                Color::white()
-            ],
-            'three' => [
-                new Route($city, $cityDiffName,
-                    Color::white(), Length::three()),
-                Color::white()
-            ],
-            'four' => [
-                new Route($city, $cityDiffName,
-                    Color::white(), Length::four()),
-                Color::white()
-            ],
-            'five' => [
-                new Route($city, $cityDiffName,
-                    Color::white(), Length::five()),
-                Color::white()
-            ],
-            'six' => [
-                new Route($city, $cityDiffName,
-                    Color::white(), Length::six()),
-                Color::white()
-            ]
-        ];
-
-        foreach ($data as $key=>$val) {
-            $data[$key][0] = $val[0]->color();
+            $data[$key] = [
+                $length,
+                $route->length()->asInteger()
+            ];
         }
 
         return $data;
@@ -211,6 +183,52 @@ final class RouteTest extends TestCase
         }
 
         return $data;
+    }
+
+    private function routeLengthScoreData()
+    {
+        $firstCity  = new City("Hello City");
+        $secondCity = new City("Hello Metropolis");
+
+        return [
+            [
+                'lengthName'    => 'one',
+                'route'         => new Route($firstCity, $secondCity,
+                    Color::white(), Length::one()),
+                'length'        => 1,
+                'score'         => 1
+            ], [
+                'lengthName'    => 'two',
+                'route'         => new Route($firstCity, $secondCity,
+                    Color::white(), Length::two()),
+                'length'        => 2,
+                'score'         => 2
+            ], [
+                'lengthName'    => 'three',
+                'route'         => new Route($firstCity, $secondCity,
+                    Color::white(), Length::three()),
+                'length'        => 3,
+                'score'         => 4
+            ], [
+                'lengthName'    => 'four',
+                'route'         => new Route($firstCity, $secondCity,
+                    Color::white(), Length::four()),
+                'length'        => 4,
+                'score'         => 7
+            ], [
+                'lengthName'    => 'five',
+                'route'         => new Route($firstCity, $secondCity,
+                    Color::white(), Length::five()),
+                'length'        => 5,
+                'score'         => 10
+            ], [
+                'lengthName'    => 'six',
+                'route'         => new Route($firstCity, $secondCity,
+                    Color::white(), Length::six()),
+                'length'        => 6,
+                'score'         => 15
+            ]
+        ];
     }
     //#endregion
 
