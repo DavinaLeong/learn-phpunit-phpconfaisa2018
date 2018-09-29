@@ -3,18 +3,29 @@ namespace TicketToRide;
 
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \TicketToRide\City
+ */
 final class CityTest extends TestCase
 {
-    public function testNameIsSingapore()
+    private $city;
+
+    public function setUp()
     {
-        $city = new City("Singapore");
-        $this->assertEquals($city->name(), "Singapore");
+        $this->city = new City("Hello City");
     }
 
-    public function testEmptyNameException()
+    public function testNameCannotBeEmpty()
     {
         $this->expectException(InvalidArgumentException::class);
-        $city = new City(" ");
+        new City('');
     }
 
-} // end CityTest
+    public function testValidCity()
+    {
+        $expected   = "Hello City";
+        $actual     = $this->city->name();
+        $this->assertEquals($expected, $actual);
+    }
+
+} //end CityTest
