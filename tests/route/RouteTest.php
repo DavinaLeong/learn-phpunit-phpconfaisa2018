@@ -52,10 +52,11 @@ final class RouteTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testRouteHasLength()
+    /**
+     * @dataProvider routeLengthProvider
+     */
+    public function testRouteHasLength($expected, $actual)
     {
-        $expected   = Length::two();
-        $actual     = $this->routePurple->length();
         $this->assertEquals($expected, $actual);
     }
 
@@ -139,7 +140,51 @@ final class RouteTest extends TestCase
         foreach ($data as $key=>$val) {
             $data[$key][0] = $val[0]->color();
         }
-        var_dump($data);
+
+        return $data;
+    }
+
+    public function routeLengthProvider()
+    {
+        $city         = new City("Hello City");
+        $cityDiffName = new City("Hello Metropolis");
+
+        $data = [
+            'one' => [
+                new Route($city, $cityDiffName,
+                    Color::white(), Length::one()),
+                Color::white()
+            ],
+            'two' => [
+                new Route($city, $cityDiffName,
+                    Color::white(), Length::two()),
+                Color::white()
+            ],
+            'three' => [
+                new Route($city, $cityDiffName,
+                    Color::white(), Length::three()),
+                Color::white()
+            ],
+            'four' => [
+                new Route($city, $cityDiffName,
+                    Color::white(), Length::four()),
+                Color::white()
+            ],
+            'five' => [
+                new Route($city, $cityDiffName,
+                    Color::white(), Length::five()),
+                Color::white()
+            ],
+            'six' => [
+                new Route($city, $cityDiffName,
+                    Color::white(), Length::six()),
+                Color::white()
+            ]
+        ];
+
+        foreach ($data as $key=>$val) {
+            $data[$key][0] = $val[0]->color();
+        }
 
         return $data;
     }
