@@ -47,9 +47,12 @@ final class RouteTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testCalculateScore()
+    /**
+     * @dataProvider routeScoreProvider
+     */
+    public function testCalculateScore($expected, $actual)
     {
-        $this->markTestIncomplete();
+        $this->assertEquals($expected, $actual);
     }
     //#endregion
 
@@ -121,12 +124,11 @@ final class RouteTest extends TestCase
         foreach ($this->routeLengthScoreData() as $rlsData) {
             $key    = $rlsData['lengthName'];
             $route  = $rlsData['route'];
-            $length = $rlsData['length'];
 
-            $data[$key] = [
-                $length,
-                $route->length()->asInteger()
-            ];
+            $expected   = $rlsData['length'];
+            $actual     = $route->length()->asInteger();
+
+            $data[$key] = [$expected, $actual];
         }
 
         return $data;
@@ -183,6 +185,24 @@ final class RouteTest extends TestCase
                 $checker->canClaimRoute($route, $cards),
                 $val['claimable']
             ];
+        }
+
+        return $data;
+    }
+
+    public function routeScoreProvider()
+    {
+        $data = [];
+        $calculator = new ScoreCalculator();
+        foreach ($this->routeLengthScoreData() as $rlsData) {
+            $key    = "Length: " . $rlsData['length'] . " | " .
+                "Score: " . $rlsData['score'];
+            $route  = $rlsData['route'];
+
+            $expected   = $rlsData['score'];
+            $actual     = $calculator->scoreRoute($route);
+
+            $data[$key] = [$expected, $actual];
         }
 
         return $data;
