@@ -16,25 +16,23 @@ final class RouteTest extends TestCase
     private $citySameName;
     private $cityDiffName;
 
-    private $route;
+    private $routePurple;
+    private $routeGray;
 
-    private $cards;
+    private $cardsPurple;
 
     public function setUp()
     {
-        $color              = Color::purple();
-        $length             = Length::two();
-
         $this->city         = new City("Hello City");
         $this->citySameName = new City("Hello City");
         $this->cityDiffName = new City("Hello Metropolis");
 
-        $this->route        = new Route($this->city, $this->cityDiffName,
-           $color, $length);
+        $this->routePurple  = new Route($this->city, $this->cityDiffName,
+            Color::purple(), Length::two());
 
-        $this->cards        = new CardCollection();
-        $this->cards->add(Card::purple());
-        $this->cards->add(Card::purple());
+        $this->cardsPurple        = new CardCollection();
+        $this->cardsPurple->add(Card::purple());
+        $this->cardsPurple->add(Card::purple());
     }
 
     public function testCitiesCantBeSame()
@@ -46,21 +44,21 @@ final class RouteTest extends TestCase
     public function testRouteHasColor()
     {
         $expected   = Color::purple();
-        $actual     = $this->route->color();
+        $actual     = $this->routePurple->color();
         $this->assertEquals($expected, $actual);
     }
 
     public function testRouteHasLength()
     {
         $expected   = Length::two();
-        $actual     = $this->route->length();
+        $actual     = $this->routePurple->length();
         $this->assertEquals($expected, $actual);
     }
 
     public function testRouteIsClaimable()
     {
         $checker    = new RouteClaimChecker();
-        $expected   = $checker->canClaimRoute($this->route, $this->cards);
+        $expected   = $checker->canClaimRoute($this->routePurple, $this->cardsPurple);
 
         $this->assertTrue($expected);
     }
