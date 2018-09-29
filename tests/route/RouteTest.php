@@ -12,36 +12,12 @@ use PHPUnit\Framework\TestCase;
  */
 final class RouteTest extends TestCase
 {
-    private $city;
-    private $citySameName;
-    private $cityDiffName;
-
-    private $routePurple;
-    private $routeGray;
-
-    private $cardsPurple;
-
-    public function setUp()
-    {
-        $this->city         = new City("Hello City");
-        $this->citySameName = new City("Hello City");
-        $this->cityDiffName = new City("Hello Metropolis");
-
-        $this->routePurple  = new Route($this->city, $this->cityDiffName,
-            Color::purple(), Length::two());
-        $this->routeGray    = new Route($this->city, $this->cityDiffName,
-            Color::wildcard(), Length::two());
-
-        $this->cardsPurple  = new CardCollection();
-        $this->cardsPurple->add(Card::purple());
-        $this->cardsPurple->add(Card::purple());
-    }
-
     //#region Tests
     public function testCitiesCantBeSame()
     {
         $this->expectException(InvalidArgumentException::class);
-        new Route($this->city, $this->citySameName, Color::red(), Length::one());
+        new Route("Hello City", "Hello City",
+            Color::white(), Length::one());
     }
 
     /**
@@ -60,20 +36,12 @@ final class RouteTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testRouteIsClaimable()
+    /**
+     * @dataProvider routeClaimableProvider
+     */
+    public function testRouteIsClaimable($expected, $actual)
     {
-        $checker    = new RouteClaimChecker();
-        $expected   = $checker->canClaimRoute($this->routePurple, $this->cardsPurple);
-
-        $this->assertTrue($expected);
-    }
-
-    public function testWildcardClaimable()
-    {
-        $checker    = new RouteClaimChecker();
-        $expected   = $checker->canClaimRoute($this->routeGray, $this->cardsPurple);
-
-        $this->assertTrue($expected);
+        $this->assertEquals($expected, $actual);
     }
 
     public function testCalculateScore()
@@ -184,6 +152,62 @@ final class RouteTest extends TestCase
 
         foreach ($data as $key=>$val) {
             $data[$key][0] = $val[0]->color();
+        }
+
+        return $data;
+    }
+
+    public function routeClaimableProvider()
+    {
+        $firstCity  = new City("Hello City");
+        $secondCity = new City("Hello Metropolis");
+
+        $routeCards = [
+            'Claimable - same-colored cards' => [
+                'route' => new Route($firstCity, $secondCity,
+                    Color::white(), Length::two()),
+                'cards' => [ Card::white(), Card::white() ],
+                'claimable' => true
+            ],
+            'Claimable - wildcards cards' => [
+                'route' => new Route($firstCity, $secondCity,
+                    Color::white(), Length::two()),
+                'cards' => [ Card::locomotive(), Card::locomotive() ],
+                'claimable' => true
+            ],
+            'Claimable - one wildcard, one same-colored' => [
+                'route' => new Route($firstCity, $secondCity,
+                    Color::white(), Length::two()),
+                'cards' => [ Card::locomotive(), Card::white() ],
+                'claimable' => true
+            ],
+            'Not Claimable - different-colored cards' => [
+                'route' => new Route($firstCity, $secondCity,
+                    Color::white(), Length::two()),
+                'cards' => [ Card::white(), Card::red() ],
+                'claimable' => false
+            ],
+            'Not Claimable - insufficient cards' => [
+                'route' => new Route($firstCity, $secondCity,
+                    Color::white(), Length::two()),
+                'cards' => [ Card::white() ],
+                'claimable' => false
+            ]
+        ];
+        $checker = new RouteClaimChecker();
+
+        $data = [];
+        foreach ($routeCards as $key=>$val) {
+            $route = $val['route'];
+            $cards = new CardCollection();
+            foreach ($val['cards'] as $card) {
+                $cards->add($card);
+            }
+
+            $data[$key] = [
+                $checker->canClaimRoute($route, $cards),
+                $val['claimable']
+            ];
         }
 
         return $data;
