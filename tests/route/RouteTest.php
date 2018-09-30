@@ -46,8 +46,13 @@ final class RouteTest extends TestCase
     /**
      * @dataProvider routeClaimableProvider
      */
-    public function testRouteIsClaimable($expected, $actual): void
+    public function testRouteCanBeClaimed(bool $canBeClaimed, Route $route,
+        CardCollection $cards): void
     {
+        $checker    = new RouteClaimChecker();
+
+        $expected   = $canBeClaimed;
+        $actual     = $checker->canClaimRoute($route, $cards);
         $this->assertEquals($expected, $actual);
     }
 
@@ -137,52 +142,56 @@ final class RouteTest extends TestCase
         $firstCity  = new City("Hello City");
         $secondCity = new City("Hello Metropolis");
 
-        $routeCards = [
+        /* Structure:
+         * dataset name = [
+         *      0 => can be claimed; expected result
+         *      1 => Route
+         *      2 => Card collection
+         * ]
+         */
+        $data = [
             'Claimable - same-colored cards' => [
-                new Route($firstCity, $secondCity,
-                    Color::white(), Length::two()),
-                'cards' => [ Card::white(), Card::white() ],
-                'claimable' => true
+                true,   //expected
+                new Route($firstCity, $secondCity, Color::white(),
+                    Length::two()),
+                [Card::white(), Card::white()]
             ],
             'Claimable - wildcards cards' => [
-                new Route($firstCity, $secondCity,
-                    Color::white(), Length::two()),
-                'cards' => [ Card::locomotive(), Card::locomotive() ],
-                'claimable' => true
+                true,   //expected
+                new Route($firstCity, $secondCity, Color::white(),
+                    Length::two()),
+                [Card::locomotive(), Card::locomotive()]
             ],
             'Claimable - one wildcard, one same-colored' => [
-                new Route($firstCity, $secondCity,
-                    Color::white(), Length::two()),
-                'cards' => [ Card::locomotive(), Card::white() ],
-                'claimable' => true
+                true,   //expected
+                new Route($firstCity, $secondCity, Color::white(),
+                    Length::two()),
+                [Card::locomotive(), Card::white()]
             ],
             'Not Claimable - different-colored cards' => [
-                new Route($firstCity, $secondCity,
-                    Color::white(), Length::two()),
-                'cards' => [ Card::white(), Card::red() ],
-                'claimable' => false
+                false,  //expected
+                new Route($firstCity, $secondCity, Color::white(),
+                    Length::two()),
+                [Card::white(), Card::red()]
             ],
             'Not Claimable - insufficient cards' => [
-                new Route($firstCity, $secondCity,
-                    Color::white(), Length::two()),
-                'cards' => [ Card::white() ],
-                'claimable' => false
+                false,  //expected
+                new Route($firstCity, $secondCity, Color::white(),
+                    Length::two()),
+                [Card::white()]
             ]
         ];
-        $checker = new RouteClaimChecker();
 
-        $data = [];
-        foreach ($routeCards as $key=>$val) {
-            $route = $val['route'];
-            $cards = new CardCollection();
-            foreach ($val['cards'] as $card) {
-                $cards->add($card);
+        //Replace the cards array with an actual card collection
+        foreach ($data as $key=>$val) {
+            $cards = $val[2];
+            $collection = new CardCollection();
+
+            foreach($cards as $keyCard=>$valCard) {
+                $collection->add($valCard);
             }
 
-            $data[$key] = [
-                $checker->canClaimRoute($route, $cards),
-                $val['claimable']
-            ];
+            $data[$key][2] = $collection;
         }
 
         return $data;
