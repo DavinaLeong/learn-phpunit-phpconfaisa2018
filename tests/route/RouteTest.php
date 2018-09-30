@@ -26,7 +26,7 @@ final class RouteTest extends TestCase
     /**
      * @dataProvider routeColorProvider
      */
-    public function testRouteHasColor(Color $color, Route $route): void
+    public function testRouteCanHaveColor(Color $color, Route $route): void
     {
         $expected   = $color;
         $actual     = $route->color();
@@ -36,7 +36,7 @@ final class RouteTest extends TestCase
     /**
      * @dataProvider routeLengthProvider
      */
-    public function testRouteHasLength(Length $length, Route $route): void
+    public function testRouteCanHaveLength(Length $length, Route $route): void
     {
         $expected   = $length->asInteger();
         $actual     = $route->length()->asInteger();
