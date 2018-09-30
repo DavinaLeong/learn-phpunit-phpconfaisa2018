@@ -10,66 +10,56 @@ use PHPUnit\Framework\TestCase;
  */
 final class CardTest extends TestCase
 {
-    public function testCanBePurple(): void
+    /**
+     * @dataProvider cardColorProvider
+     */
+    public function testCanBe(Color $color, Card $card): void
     {
-        $card = Card::purple();
-
-        $this->assertTrue($card->color()->equalTo(Color::purple()));
+        $expected   = $color->asString();
+        $actual     = $card->color()->asString();
+        $this->assertEquals($expected, $actual);
     }
 
-    public function testCanBeWhite(): void
+    public function cardColorProvider(): array
     {
-        $card = Card::white();
-
-        $this->assertTrue($card->color()->equalTo(Color::white()));
+        return [
+            'purple'    => [
+                Color::purple(),
+                Card::purple()
+            ],
+            'white'     => [
+                Color::white(),
+                Card::white()
+            ],
+            'blue'      => [
+                Color::blue(),
+                Card::blue()
+            ],
+            'yellow'    => [
+                Color::yellow(),
+                Card::yellow()
+            ],
+            'orange'    => [
+                Color::orange(),
+                Card::orange()
+            ],
+            'black'     => [
+                Color::black(),
+                Card::black()
+            ],
+            'red'       => [
+                Color::red(),
+                Card::red()
+            ],
+            'green'     => [
+                Color::green(),
+                Card::green()
+            ],
+            'wildcard'  => [
+                Color::wildcard(),
+                Card::locomotive()
+            ]
+        ];
     }
 
-    public function testCanBeBlue(): void
-    {
-        $card = Card::blue();
-
-        $this->assertTrue($card->color()->equalTo(Color::blue()));
-    }
-
-    public function testCanBeYellow(): void
-    {
-        $card = Card::yellow();
-
-        $this->assertTrue($card->color()->equalTo(Color::yellow()));
-    }
-
-    public function testCanBeOrange(): void
-    {
-        $card = Card::orange();
-
-        $this->assertTrue($card->color()->equalTo(Color::orange()));
-    }
-
-    public function testCanBeBlack(): void
-    {
-        $card = Card::black();
-
-        $this->assertTrue($card->color()->equalTo(Color::black()));
-    }
-
-    public function testCanBeRed(): void
-    {
-        $card = Card::red();
-
-        $this->assertTrue($card->color()->equalTo(Color::red()));
-    }
-
-    public function testCanBeGreen(): void
-    {
-        $card = Card::green();
-
-        $this->assertTrue($card->color()->equalTo(Color::green()));
-    }
-
-    public function testCanBeLocomotive(): void
-    {
-        $card = Card::locomotive();
-
-        $this->assertTrue($card->color()->equalTo(Color::wildcard()));
-    }
-}
+} //end CardTes
