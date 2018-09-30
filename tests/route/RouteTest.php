@@ -61,7 +61,7 @@ final class RouteTest extends TestCase
      */
     public function testCalculateScore(int $score, Route $route): void
     {
-        $calculator = new ScoreCalculator($route);
+        $calculator = new ScoreCalculator();
 
         $expected   = $score;
         $actual     = $calculator->scoreRoute($route);
@@ -204,7 +204,6 @@ final class RouteTest extends TestCase
     public function routeScoreProvider(): array
     {
         $data = [];
-        $calculator = new ScoreCalculator();
         foreach ($this->routeLengthScoreDataset() as $rlsData) {
             $route  = $rlsData['route'];
             $length = $route->length()->asInteger();
