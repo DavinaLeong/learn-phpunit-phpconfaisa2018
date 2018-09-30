@@ -26,17 +26,18 @@ final class RouteTest extends TestCase
     /**
      * @dataProvider routeColorProvider
      */
-    public function testRouteHasColor($expected, $actual): void
+    public function testRouteHasColor(Color $color, Route $route): void
     {
-        $this->assertEquals($expected, $actual);
+        $this->assertEquals($color, $route->color());
     }
 
     /**
      * @dataProvider routeLengthProvider
      */
-    public function testRouteHasLength($expected, $actual): void
+    public function testRouteHasLength(Length $length, Route $route): void
     {
-        $this->assertEquals($expected, $actual);
+        $this->assertEquals($length->asInteger(),
+            $route->length()->asInteger());
     }
 
     /**
@@ -65,55 +66,51 @@ final class RouteTest extends TestCase
 
         $data = [
             'purple' => [
+                Color::purple(),
                 new Route($city, $cityDiffName,
-                    Color::purple(), Length::one()),
-                Color::purple()
+                    Color::purple(), Length::one())
             ],
             'white' => [
+                Color::white(),
                 new Route($city, $cityDiffName,
-                    Color::white(), Length::one()),
-                Color::white()
+                    Color::white(), Length::one())
             ],
             'blue' => [
+                Color::blue(),
                 new Route($city, $cityDiffName,
-                    Color::blue(), Length::one()),
-                Color::blue()
+                    Color::blue(), Length::one())
             ],
             'yellow' => [
+                Color::yellow(),
                 new Route($city, $cityDiffName,
-                    Color::yellow(), Length::one()),
-                Color::yellow()
+                    Color::yellow(), Length::one())
             ],
             'orange' => [
+                Color::orange(),
                 new Route($city, $cityDiffName,
-                    Color::orange(), Length::one()),
-                Color::orange()
+                    Color::orange(), Length::one())
             ],
             'black' => [
+                Color::black(),
                 new Route($city, $cityDiffName,
-                    Color::black(), Length::one()),
-                Color::black()
+                    Color::black(), Length::one())
             ],
             'red' => [
+                Color::red(),
                 new Route($city, $cityDiffName,
-                    Color::red(), Length::one()),
-                Color::red()
+                    Color::red(), Length::one())
             ],
             'green' => [
+                Color::green(),
                 new Route($city, $cityDiffName,
-                    Color::green(), Length::one()),
-                Color::green()
+                    Color::green(), Length::one())
             ],
             'wildcard' => [
+                Color::wildcard(),
                 new Route($city, $cityDiffName,
-                    Color::wildcard(), Length::one()),
-                Color::wildcard()
+                    Color::wildcard(), Length::one())
             ]
         ];
-
-        foreach ($data as $key=>$val) {
-            $data[$key][0] = $val[0]->color();
-        }
 
         return $data;
     }
@@ -123,12 +120,10 @@ final class RouteTest extends TestCase
         $data = [];
         foreach ($this->routeLengthScoreData() as $rlsData) {
             $key    = $rlsData['lengthName'];
+            $length = $rlsData['length'];
             $route  = $rlsData['route'];
 
-            $expected   = $rlsData['length'];
-            $actual     = $route->length()->asInteger();
-
-            $data[$key] = [$expected, $actual];
+            $data[$key] = [$length, $route];
         }
 
         return $data;
@@ -141,31 +136,31 @@ final class RouteTest extends TestCase
 
         $routeCards = [
             'Claimable - same-colored cards' => [
-                'route' => new Route($firstCity, $secondCity,
+                new Route($firstCity, $secondCity,
                     Color::white(), Length::two()),
                 'cards' => [ Card::white(), Card::white() ],
                 'claimable' => true
             ],
             'Claimable - wildcards cards' => [
-                'route' => new Route($firstCity, $secondCity,
+                new Route($firstCity, $secondCity,
                     Color::white(), Length::two()),
                 'cards' => [ Card::locomotive(), Card::locomotive() ],
                 'claimable' => true
             ],
             'Claimable - one wildcard, one same-colored' => [
-                'route' => new Route($firstCity, $secondCity,
+                new Route($firstCity, $secondCity,
                     Color::white(), Length::two()),
                 'cards' => [ Card::locomotive(), Card::white() ],
                 'claimable' => true
             ],
             'Not Claimable - different-colored cards' => [
-                'route' => new Route($firstCity, $secondCity,
+                new Route($firstCity, $secondCity,
                     Color::white(), Length::two()),
                 'cards' => [ Card::white(), Card::red() ],
                 'claimable' => false
             ],
             'Not Claimable - insufficient cards' => [
-                'route' => new Route($firstCity, $secondCity,
+                new Route($firstCity, $secondCity,
                     Color::white(), Length::two()),
                 'cards' => [ Card::white() ],
                 'claimable' => false
@@ -195,11 +190,12 @@ final class RouteTest extends TestCase
         $data = [];
         $calculator = new ScoreCalculator();
         foreach ($this->routeLengthScoreData() as $rlsData) {
-            $key    = "Length: " . $rlsData['length'] . " | " .
-                "Score: " . $rlsData['score'];
             $route  = $rlsData['route'];
+            $length = $route->length()->asInteger();
+            $score  = $rlsData['score'];
+            $key    = "Length: $length | Score: $score";
 
-            $expected   = $rlsData['score'];
+            $expected   = $score;
             $actual     = $calculator->scoreRoute($route);
 
             $data[$key] = [$expected, $actual];
@@ -218,37 +214,37 @@ final class RouteTest extends TestCase
                 'lengthName'    => 'one',
                 'route'         => new Route($firstCity, $secondCity,
                     Color::white(), Length::one()),
-                'length'        => 1,
+                'length'        => Length::one(),
                 'score'         => 1
             ], [
                 'lengthName'    => 'two',
                 'route'         => new Route($firstCity, $secondCity,
                     Color::white(), Length::two()),
-                'length'        => 2,
+                'length'        => Length::two(),
                 'score'         => 2
             ], [
                 'lengthName'    => 'three',
                 'route'         => new Route($firstCity, $secondCity,
                     Color::white(), Length::three()),
-                'length'        => 3,
+                'length'        => Length::three(),
                 'score'         => 4
             ], [
                 'lengthName'    => 'four',
                 'route'         => new Route($firstCity, $secondCity,
                     Color::white(), Length::four()),
-                'length'        => 4,
+                'length'        => Length::four(),
                 'score'         => 7
             ], [
                 'lengthName'    => 'five',
                 'route'         => new Route($firstCity, $secondCity,
                     Color::white(), Length::five()),
-                'length'        => 5,
+                'length'        => Length::five(),
                 'score'         => 10
             ], [
                 'lengthName'    => 'six',
                 'route'         => new Route($firstCity, $secondCity,
                     Color::white(), Length::six()),
-                'length'        => 6,
+                'length'        => Length::six(),
                 'score'         => 15
             ]
         ];
