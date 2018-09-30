@@ -59,8 +59,12 @@ final class RouteTest extends TestCase
     /**
      * @dataProvider routeScoreProvider
      */
-    public function testCalculateScore($expected, $actual): void
+    public function testCalculateScore(int $score, Route $route): void
     {
+        $calculator = new ScoreCalculator($route);
+
+        $expected   = $score;
+        $actual     = $calculator->scoreRoute($route);
         $this->assertEquals($expected, $actual);
     }
     //#endregion
@@ -126,11 +130,11 @@ final class RouteTest extends TestCase
     public function routeLengthProvider(): array
     {
         $data = [];
-        foreach ($this->routeLengthScoreData() as $rlsData) {
-            $key    = $rlsData['lengthName'];
+        foreach ($this->routeLengthScoreDataset() as $rlsData) {
             $length = $rlsData['length'];
             $route  = $rlsData['route'];
 
+            $key    = $rlsData['lengthName'];
             $data[$key] = [$length, $route];
         }
 
@@ -201,22 +205,19 @@ final class RouteTest extends TestCase
     {
         $data = [];
         $calculator = new ScoreCalculator();
-        foreach ($this->routeLengthScoreData() as $rlsData) {
+        foreach ($this->routeLengthScoreDataset() as $rlsData) {
             $route  = $rlsData['route'];
             $length = $route->length()->asInteger();
             $score  = $rlsData['score'];
+
             $key    = "Length: $length | Score: $score";
-
-            $expected   = $score;
-            $actual     = $calculator->scoreRoute($route);
-
-            $data[$key] = [$expected, $actual];
+            $data[$key] = [$score, $route];
         }
 
         return $data;
     }
 
-    private function routeLengthScoreData(): array
+    private function routeLengthScoreDataset(): array
     {
         $firstCity  = new City("Hello City");
         $secondCity = new City("Hello Metropolis");
