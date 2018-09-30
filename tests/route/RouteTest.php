@@ -19,8 +19,8 @@ final class RouteTest extends TestCase
         $firstCity  = new City("Hello City");
         $secondCity = new City("Hello City");
 
-        new Route($firstCity, $secondCity,
-            Color::white(), Length::one());
+        new Route($firstCity, $secondCity, Color::white(),
+            Length::one());
     }
 
     /**
@@ -28,7 +28,9 @@ final class RouteTest extends TestCase
      */
     public function testRouteHasColor(Color $color, Route $route): void
     {
-        $this->assertEquals($color, $route->color());
+        $expected   = $color;
+        $actual     = $route->color();
+        $this->assertEquals($expected, $actual);
     }
 
     /**
@@ -36,8 +38,9 @@ final class RouteTest extends TestCase
      */
     public function testRouteHasLength(Length $length, Route $route): void
     {
-        $this->assertEquals($length->asInteger(),
-            $route->length()->asInteger());
+        $expected   = $length->asInteger();
+        $actual     = $route->length()->asInteger();
+        $this->assertEquals($expected, $actual);
     }
 
     /**
