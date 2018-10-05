@@ -3,6 +3,7 @@
 ## About
 My take on the PHPUnit workshop conducted by Sebastian Bergmann at [PHP Conf Asia 2018](https://2018.phpconf.asia/).
 
+## Rules
 - A city has a non-empty name
 - A route connects two different cities
 - A route has a color
