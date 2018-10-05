@@ -13,7 +13,7 @@ final class CardTest extends TestCase
     /**
      * @dataProvider cardColorProvider
      */
-    public function testCanBe(Color $color, Card $card): void
+    public function testCanHaveColor(Color $color, Card $card): void
     {
         $expected   = $color->asString();
         $actual     = $card->color()->asString();
