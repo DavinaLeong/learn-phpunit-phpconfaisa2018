@@ -13,32 +13,60 @@ use PHPUnit\Framework\TestCase;
 final class RouteTest extends TestCase
 {
     // === Tests ==============================================================
-    public function testCitiesCantBeSame(): void
+    public function testCannotConnectTwoSameCities(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $firstCity  = new City("Hello City");
-        $secondCity = new City("Hello City");
 
-        new Route($firstCity, $secondCity, Color::white(),
-            Length::one());
+        new Route(
+            new City("Same City"),
+            new City("Same City"),
+            Color::white(),
+            Length::one()
+        );
+    }
+
+    public function testCanConnectTwoDifferentCities(): void
+    {
+        $route = new Route(
+            new City("Same City"),
+            new City("Different City"),
+            Color::white(),
+            Length::one()
+        );
+        $expected   = true;
+        $actual     = ($route->firstCity()->name() !== $route->secondCity()->name());
+        $this->assertEquals($expected, $actual);
     }
 
     /**
      * @dataProvider routeColorProvider
      */
-    public function testRouteCanHaveColor(Color $color, Route $route): void
+    public function testRouteCanHaveColor(Color $color, string $colorValue): void
     {
-        $expected   = $color;
-        $actual     = $route->color();
+        $route      = new Route(
+            new City("Same City"),
+            new City("Different City"),
+            $color,
+            Length::one()
+        );
+        $expected   = $colorValue;
+        $actual     = $route->color()->asString();
         $this->assertEquals($expected, $actual);
     }
 
     /**
      * @dataProvider routeLengthProvider
      */
-    public function testRouteCanHaveLength(Length $length, Route $route): void
+    public function testRouteCanHaveLength(Length $length, int $lengthValue): void
     {
-        $expected   = $length->asInteger();
+        $route      = new Route(
+            new City("Same City"),
+            new City("Different City"),
+            Color::white(),
+            $length
+        );
+
+        $expected   = $lengthValue;
         $actual     = $route->length()->asInteger();
         $this->assertEquals($expected, $actual);
     }
@@ -47,55 +75,16 @@ final class RouteTest extends TestCase
     // === Data Providers =====================================================
     public function routeColorProvider(): array
     {
-        $city         = new City("Hello City");
-        $cityDiffName = new City("Hello Metropolis");
-
         $data = [
-            'purple' => [
-                Color::purple(),
-                new Route($city, $cityDiffName,
-                    Color::purple(), Length::one())
-            ],
-            'white' => [
-                Color::white(),
-                new Route($city, $cityDiffName,
-                    Color::white(), Length::one())
-            ],
-            'blue' => [
-                Color::blue(),
-                new Route($city, $cityDiffName,
-                    Color::blue(), Length::one())
-            ],
-            'yellow' => [
-                Color::yellow(),
-                new Route($city, $cityDiffName,
-                    Color::yellow(), Length::one())
-            ],
-            'orange' => [
-                Color::orange(),
-                new Route($city, $cityDiffName,
-                    Color::orange(), Length::one())
-            ],
-            'black' => [
-                Color::black(),
-                new Route($city, $cityDiffName,
-                    Color::black(), Length::one())
-            ],
-            'red' => [
-                Color::red(),
-                new Route($city, $cityDiffName,
-                    Color::red(), Length::one())
-            ],
-            'green' => [
-                Color::green(),
-                new Route($city, $cityDiffName,
-                    Color::green(), Length::one())
-            ],
-            'wildcard' => [
-                Color::wildcard(),
-                new Route($city, $cityDiffName,
-                    Color::wildcard(), Length::one())
-            ]
+            'purple'    => [Color::purple(), 'purple'],
+            'white'     => [Color::white(), 'white'],
+            'blue'      => [Color::blue(), 'blue'],
+            'yellow'    => [Color::yellow(), 'yellow'],
+            'orange'    => [Color::orange(), 'orange'],
+            'black'     => [Color::black(), 'black'],
+            'red'       => [Color::red(), 'red'],
+            'green'     => [Color::green(), 'green'],
+            'wildcard'  => [Color::wildcard(), 'wildcard']
         ];
 
         return $data;
@@ -103,40 +92,13 @@ final class RouteTest extends TestCase
 
     public function routeLengthProvider(): array
     {
-        $firstCity  = new City("Hello City");
-        $secondCity = new City("Hello Metropolis");
-
         return [
-            'one'   => [
-                Length::one(),
-                new Route($firstCity, $secondCity, Color::white(),
-                    Length::one())
-            ],
-            'two'   => [
-                Length::two(),
-                new Route($firstCity, $secondCity, Color::white(),
-                    Length::two())
-            ],
-            'three' => [
-                Length::three(),
-                new Route($firstCity, $secondCity, Color::white(),
-                    Length::three())
-            ],
-            'four'  => [
-                Length::four(),
-                new Route($firstCity, $secondCity, Color::white(),
-                    Length::four())
-            ],
-            'five'  => [
-                Length::five(),
-                new Route($firstCity, $secondCity, Color::white(),
-                    Length::five())
-            ],
-            'six'   => [
-                Length::six(),
-                new Route($firstCity, $secondCity, Color::white(),
-                    Length::six())
-            ]
+            'one'   => [Length::one(), 1],
+            'two'   => [Length::two(), 2],
+            'three' => [Length::three(), 3],
+            'four'  => [Length::four(), 4],
+            'five'  => [Length::five(), 5],
+            'six'   => [Length::six(), 6]
         ];
     }
 
