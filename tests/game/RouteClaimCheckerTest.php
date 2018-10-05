@@ -15,9 +15,9 @@ final class RouteClaimCheckerTest extends TestCase
 {
     // === Tests ==============================================================
     /**
-     * @dataProvider routeClaimableProvider
+     * @dataProvider claimabilityProvider
      */
-    public function testRouteCanBeClaimed(bool $canBeClaimed, Route $route,
+    public function testRouteClaimability(bool $canBeClaimed, Route $route,
         CardCollection $cards): void
     {
         $checker    = new RouteClaimChecker();
@@ -29,14 +29,14 @@ final class RouteClaimCheckerTest extends TestCase
     
     
     // === Data Providers =====================================================
-    public function routeClaimableProvider(): array
+    public function claimabilityProvider(): array
     {
-        $firstCity  = new City("Hello City");
-        $secondCity = new City("Hello Metropolis");
+        $firstCity  = new City("Same City");
+        $secondCity = new City("Different City");
 
         /* Structure:
          * [dataset name] => [
-         *      0 => Can route be claimed?
+         *      0 => expected output; Can route be claimed?
          *      1 => Route
          *      2 => Card collection
          * ]

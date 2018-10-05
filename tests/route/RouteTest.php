@@ -43,7 +43,7 @@ final class RouteTest extends TestCase
      */
     public function testRouteCanHaveColor(Color $color, string $colorValue): void
     {
-        $route      = new Route(
+        $route = new Route(
             new City("Same City"),
             new City("Different City"),
             $color,
@@ -59,7 +59,7 @@ final class RouteTest extends TestCase
      */
     public function testRouteCanHaveLength(Length $length, int $lengthValue): void
     {
-        $route      = new Route(
+        $route = new Route(
             new City("Same City"),
             new City("Different City"),
             Color::white(),
